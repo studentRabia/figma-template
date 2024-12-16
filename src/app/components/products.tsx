@@ -62,7 +62,7 @@ const products = [
 
 const Products = () => {
   return (
-    <section className="py-8 bg-gray-50">
+    <section className="pb-28 bg-white">
       <div className="max-w-[1200px] mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => (
@@ -77,7 +77,7 @@ const Products = () => {
                   alt={product.title}
                   width={400}
                   height={400}
-                  className="w-full h-60 object-cover"
+                  className="w-full h-60 object-fill object-center "
                 />
                 {product.tag && (
                   <span

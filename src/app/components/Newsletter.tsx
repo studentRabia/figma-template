@@ -1,37 +1,59 @@
-// components/Newsletter.tsx
+import Image from "next/image";
 
-import FutureProduct from "./futureProduct";
-
-const Newsletter = () => {
-    return (
-      <div className="p-6 py-6 rounded md:px-12 md:py-12 lg:py-16 mt-32 bg-indigo-50">
-        <div className="flex flex-col items-center justify-between space-y-6 lg:space-y-0 lg:space-x-8">
-          {/* Heading Section */}
-          <div className="max-w-2xl mb-4 text-center lg:mb-8">
-            <h3 className="mb-6 text-3xl font-semibold text-gray-950 lg:text-4xl">
-            Or subscribe to the newsletter
-            </h3>
-            <div className="flex items-center justify-between text-gray-600 mb-6">
-                <div>
-                    <p>Email address...</p>
-                </div>
-                <div>SUBMIT</div>
-            </div>
-            <hr className="mx-[10%] sm:mx-[20%] lg:mx-[1%] my-4 border-t-2 sm:border-t-3 lg:border-t-4 border-black" />
-
-             
-             <h3 className="mb-4 mt-10 text-3xl font-semibold text-gray-950 lg:text-4xl">
-             Follow products and discounts on Instagram
-            </h3>
-
-          </div >
-         <div className="flex items-center gap-8">
-         <FutureProduct/> <FutureProduct/>
-         </div>
+const NewsletterSection = () => {
+  return (
+    <section className="bg-gray-100 py-10 px-4 lg:px-8">
+      {/* Newsletter */}
+      <div className="text-center mb-10">
+        <h2 className="text-3xl font-bold my-7">Or Subscribe To The Newsletter</h2>
+        <div className="flex justify-center items-center w-full space-x-5">
+          <input
+            type="email"
+            placeholder="Email Address..."
+            className="border-b border-black bg-transparent text-[#1E2832] w-full max-w-lg px-2 py-1 focus:outline-none"
+          />
+          <button
+            type="submit"
+            className="border-b border-black ml-2 text-sm font-medium uppercase text-[#1E2832] hover:text-black px-2 py-1"
+          >
+            Submit
+          </button>
         </div>
       </div>
-    );
-  };
-  
-  export default Newsletter;
-  
+
+      {/* Instagram Section */}
+      <div className="text-center">
+        <h3 className="text-3xl font-bold my-14">
+          Follow Products And Discounts On Instagram
+        </h3>
+
+        {/* Grid Container with Padding */}
+        <div className="mx-auto px-8 sm:px-[10%] lg:px-[16%] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+          {[
+            "/images/Stool.png",
+            "/images/WheelCh.png",
+            "/images/Chirp.png",
+            "/images/Chairwe.png",
+            "/images/Chair.png",
+            "/images/Moving.png",
+          ].map((src, index) => (
+            <div
+              key={index}
+              className="rounded-lg overflow-hidden shadow hover:scale-105 transition-transform duration-300"
+            >
+              <Image
+                src={src}
+                alt={`Chair ${index + 1}`}
+                width={400}
+                height={400}
+                className="w-full h-auto object-cover object-center"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default NewsletterSection;

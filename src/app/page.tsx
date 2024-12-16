@@ -7,20 +7,19 @@ import Products from "./components/products";
 import Titlebar from "./components/titlebar";
 import TopCategories from "./components/TopCategories";
 
-
 export default function Home() {
   return (
-  <div>
-   <Hero/>
-   <LogoSection/>
-    <Titlebar title="Featured Products"/>
-    <FutureProduct/>
+    <div>
+      <Hero />
+      <LogoSection />
+      <Titlebar title="Featured Products"/>
+      <FutureProduct/>
 
-<Titlebar  title="Top categories"/>
-<TopCategories/>
-<ChairLayout/>
-<Titlebar  title="Our Product" className="text-center"/>
-<Products/>
-  </div>
+      <Titlebar title="Top categories" />
+      <TopCategories />
+      <ChairLayout />
+      <Titlebar title="Our Product" className="text-center" />
+      <Products />
+    </div>
   );
 }

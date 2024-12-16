@@ -1,10 +1,12 @@
 import React from 'react'
-import Contact from '../components/contact'
+import ContactForm from '../components/contactForm'
+import FeatureContact from '../components/featureContact'
 
 const page = () => {
   return (
     <div>
-      <Contact/>
+      <ContactForm/>
+      <FeatureContact/>
     </div>
   )
 }

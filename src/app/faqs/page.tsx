@@ -1,10 +1,10 @@
 import React from 'react'
-import CartPage from '../components/cartItem'
+import Contact from '../components/faqs'
 
 const page = () => {
   return (
     <div>
-      <CartPage/>
+      <Contact/>
     </div>
   )
 }
