@@ -1,30 +1,27 @@
 "use client";
-import Link from "next/link";
 
+import Link from "next/link";
 import { FiShoppingCart } from "react-icons/fi";
 import { TbCircleNumber2Filled } from "react-icons/tb";
 import { GiSofa } from "react-icons/gi";
-// import { FaCheck } from "react-icons/fa6";
-// import { PiWarningCircle } from "react-icons/pi";
-
 import React, { useState } from "react";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaBars, FaTimes } from "react-icons/fa";
 import { PiWarningCircle } from "react-icons/pi";
-import { FaBars, FaTimes } from "react-icons/fa"; // Import Hamburger Icon
-import { IoClose } from "react-icons/io5"; // Import Close Icon
+import { IoClose } from "react-icons/io5";
 
-
-
-const Navbar = () => {
+ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Function to toggle the menu
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <div className="w-full  bg-[#272343] text-white flex justify-between items-center px-4 md:px-40 h-[3rem] relative lg:px-40">
+    <div className="w-full bg-[#272343] text-white flex justify-between items-center px-4 md:px-40 h-[3rem] relative lg:px-40">
       {/* Left Section */}
       <div className="flex items-center gap-2 text-sm ">
         <FaCheck /> <span>Shipping on all orders over $50</span>
@@ -50,6 +47,7 @@ const Navbar = () => {
         <select
           title="options"
           className="bg-[#272343] text-white border-none outline-none mb-2 md:mb-0 sm:w-auto overflow-hidden w-44"
+          onChange={closeMenu}
         >
           <option value="english">English</option>
           <option value="urdu">Urdu</option>
@@ -57,14 +55,19 @@ const Navbar = () => {
           <option value="chines">Chinese</option>
           <option value="franch">French</option>
         </select>
-        <div><Link href="/faqs">Faqs</Link></div>
-        <div className="flex items-center gap-1 text-sm">
+        <div>
+          <Link href="/faqs" onClick={closeMenu}>
+            Faqs
+          </Link>
+        </div>
+        <div className="flex items-center gap-1 text-sm" onClick={closeMenu}>
           <PiWarningCircle /> Need Help
         </div>
       </div>
     </div>
   );
 };
+
 
 
 
@@ -92,6 +95,9 @@ export const HeaderMid = () => {
 
 
 
+
+
+
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -100,68 +106,72 @@ export const Header = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
-  return (
-    <div className="h-[4.5rem] w-full flex flex-wrap justify-between items-center border-b-2 px-6 sm:px-16 text-[#272343] md:px-40 lg:px-40">
-      {/* Left Section - Navigation Links */}
-      <nav className="flex flex-wrap gap-6">
-        <Link href="/" className="text-[#029FAE] hover:underline hover:underline-offset-4">
-          Home
-        </Link>
-        <Link href="/shop" className="text-black hover:underline hover:underline-offset-4">
-          Shop
-        </Link>
-        <Link href="/product" className="text-black hover:underline hover:underline-offset-4">
-          Product
-        </Link>
-        <Link href="/pages" className="text-black hover:underline hover:underline-offset-4">
-          Pages
-        </Link>
-        <Link href="/about" className="text-black hover:underline hover:underline-offset-4">
-          About
-        </Link>
-      </nav>
+  // Close menu when a link is clicked
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
 
-      {/* Right Section - Contact Info */}
-      <div className="mt-2 sm:mt-0 text-black text-sm hidden sm:block">
-    <Link href='/contact'>Contact: (808) 555-0111</Link>
-      </div>
+  return (
+    <div className="h-[4.5rem] w-full flex justify-between items-center border-b-2 px-6 sm:px-16 md:px-40 lg:px-40 text-[#272343]">
+      {/* Left Section - Logo */}
+      {/* <div className="text-[#029FAE] text-xl font-bold">
+        <Link href="/">Comfort</Link>
+      </div> */}
 
       {/* Hamburger Icon (Visible only on small screens) */}
       <div className="sm:hidden flex items-center">
         <button onClick={handleMenuToggle} className="text-2xl">
-          {isMenuOpen ? <FaTimes/> : <FaBars />}
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
         </button>
       </div>
 
-      {/* Mobile Menu (Visible when isMenuOpen is true) */}
-      {isMenuOpen && (
-        <div className="absolute top-[4.5rem] left-0 w-full bg-white shadow-md sm:hidden">
-          <nav className="flex flex-col items-center py-4">
-            <Link href="/" className="text-[#029FAE] hover:underline hover:underline-offset-4 mb-4">
-              Home
-            </Link>
-            <Link href="/shop" className="text-black hover:underline hover:underline-offset-4 mb-4">
-              Shop
-            </Link>
-            <Link href="/product" className="text-black hover:underline hover:underline-offset-4 mb-4">
-              Product
-            </Link>
-            <Link href="/pages" className="text-black hover:underline hover:underline-offset-4 mb-4">
-              Pages
-            </Link>
-            <Link href="/about" className="text-black hover:underline hover:underline-offset-4 mb-4">
-              About
-            </Link>
+      {/* Right Section - Navigation Links */}
+      <nav
+        className={`${
+          isMenuOpen ? "flex" : "hidden"
+        } absolute sm:relative top-[4.5rem] left-0 sm:top-0 w-full sm:w-auto bg-white sm:bg-transparent shadow-md sm:shadow-none flex-col sm:flex-row sm:flex items-center gap-6 py-4 sm:py-0 px-4 sm:px-0`}
+      >
+        <Link
+          href="/"
+          onClick={handleLinkClick}
+          className="text-[#029FAE] hover:underline hover:underline-offset-4 mb-4 sm:mb-0"
+        >
+          Home
+        </Link>
+        <Link
+          href="/shop"
+          onClick={handleLinkClick}
+          className="text-black hover:underline hover:underline-offset-4 mb-4 sm:mb-0"
+        >
+          Shop
+        </Link>
+        <Link
+          href="/product"
+          onClick={handleLinkClick}
+          className="text-black hover:underline hover:underline-offset-4 mb-4 sm:mb-0"
+        >
+          Product
+        </Link>
+        <Link
+          href="/pages"
+          onClick={handleLinkClick}
+          className="text-black hover:underline hover:underline-offset-4 mb-4 sm:mb-0"
+        >
+          Pages
+        </Link>
+        <Link
+          href="/about"
+          onClick={handleLinkClick}
+          className="text-black hover:underline hover:underline-offset-4 mb-4 sm:mb-0"
+        >
+          About
+        </Link>
+      </nav>
 
-            
-            <div className="text-black text-sm mt-4"><Link href='/contact'>Contact: (808) 555-0111</Link></div>
-          </nav>
-        </div>
-      )}
+      {/* Contact Information (Visible on medium and larger screens) */}
+      <div className="hidden sm:block text-black text-sm">
+        <Link href="/contact">Contact: (808) 555-0111</Link>
+      </div>
     </div>
   );
 };
-
-
-export default Navbar;
-
