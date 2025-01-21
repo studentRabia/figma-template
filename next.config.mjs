@@ -3,10 +3,10 @@ const nextConfig = {
     images: {
       remotePatterns: [
         {
-        //   protocol: 'https',
+          protocol: 'https',
           hostname: 'cdn.sanity.io', // Replace this with the correct hostname (e.g., sanity.io, cloudinary.com, etc.)
-        //   port: '', // Leave empty if not required
-        //   pathname: '/**', // Allow all paths
+          port: '', // Leave empty if not required
+          pathname: '**', // Allow all paths
         },
       ],
     },
