@@ -1,91 +1,98 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { CiShoppingCart } from "react-icons/ci";
-
-// Example product data
-const products = [
-  {
-    id: 1,
-    title: "Library Stool Chair",
-    price: "$20",
-    image: "/images/Chairwe.png",
-    tag: "New",
-  },
-  {
-    id: 2,
-    title: "Library Stool Chair",
-    price: "$20",
-    oldPrice: "$30",
-    image: "/images/Chirp.png",
-    tag: "Sale",
-  },
-  {
-    id: 3,
-    title: "Library Stool Chair",
-    price: "$20",
-    image: "/images/Chair.png",
-  },
-  {
-    id: 4,
-    title: "Library Stool Chair",
-    price: "$20",
-    image: "/images/Chairw.png",
-  },
-  {
-    id: 5,
-    title: "Library Stool Chair",
-    price: "$20",
-    tag: "New",
-    image: "/images/WheelCh.png",
-  },
-  {
-    id: 6,
-    title: "Library Stool Chair",
-    price: "$20",
-    oldPrice: "$30",
-    tag: "Sale",
-    image: "/images/Chairg.png",
-  },
-  {
-    id: 7,
-    title: "Library Stool Chair",
-    price: "$20",
-    image: "/images/Chairb.png",
-  },
-  {
-    id: 8,
-    title: "Library Stool Chair",
-    price: "$20",
-    image: "/images/Chairwe.png",
-  },
-];
+import { client } from "@/sanity/lib/client";
+interface Product {
+  _id: string;
+  title: string;
+  price: number;
+  priceWithoutDiscount: number;
+  badge: string | null; // Assuming badge can be null if not present
+  imageUrl: string;
+  category: {
+    _id: string;
+    title: string;
+  } | null; // Assuming category can be null if not linked
+  description: string;
+  inventory: number;
+  tags: string[];
+}
 
 const Products = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const productsPerPage = 8;
+
+  const fetchProducts = async (page: number) => {
+    const start = (page - 1) * productsPerPage;
+    const end = start + productsPerPage - 1;
+
+    const query = `
+      *[_type == "products"] | order(_createdAt desc)[${start}..${end}] {
+        _id,
+        title,
+        price,
+        priceWithoutDiscount,
+        badge,
+        "imageUrl": image.asset->url,
+        category->{
+          _id,
+          title
+        },
+        description,
+        inventory,
+        tags
+      }
+    `;
+    const totalCountQuery = `count(*[_type == "products"])`;
+
+    const [fetchedProducts, totalCount] = await Promise.all([
+      client.fetch(query),
+      client.fetch(totalCountQuery),
+    ]);
+
+    setProducts(fetchedProducts);
+    setTotalPages(Math.ceil(totalCount / productsPerPage));
+  };
+
+  useEffect(() => {
+    fetchProducts(currentPage);
+  }, [currentPage]);
+
+  const handlePageChange = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   return (
     <section className="pb-28 bg-white">
       <div className="max-w-[1200px] mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
+          {products.map((product:Product) => (
             <div
-              key={product.id}
-              className="bg-white hover:shadow-lg overflow-hidden rounded-lg transition duration-300"
+              key={product._id}
+              className="bg-white hover:shadow-lg overflow-hidden rounded-lg transition duration-300 hover:translate-x-1 hover:transition-all lg:shadow-sm"
             >
               {/* Product Image */}
               <div className="relative">
                 <Image
-                  src={product.image}
-                  alt={product.title}
+                  src={product.imageUrl || "/images/placeholder.png"}
+                  alt={product.title || "Product Image"}
                   width={400}
                   height={400}
-                  className="w-full h-60 object-fill object-center "
+                  className="w-full h-60 object-fill object-center"
                 />
-                {product.tag && (
+                {product.badge && (
                   <span
                     className={`absolute top-2 left-2 px-2 py-1 text-xs font-semibold text-white rounded ${
-                      product.tag === "New" ? "bg-green-500" : "bg-orange-500"
+                      product.badge === "New" ? "bg-green-500" : "bg-orange-500"
                     }`}
                   >
-                    {product.tag}
+                    {product.badge}
                   </span>
                 )}
               </div>
@@ -96,11 +103,11 @@ const Products = () => {
                 </h3>
                 <div className="flex items-center gap-1">
                   <p className="text-lg font-semibold text-gray-900">
-                    {product.price}
+                    ${product.price?.toFixed(2)}
                   </p>
-                  {product.oldPrice && (
+                  {product.priceWithoutDiscount && (
                     <p className="text-sm line-through text-gray-400">
-                      {product.oldPrice}
+                      ${product.priceWithoutDiscount?.toFixed(2)}
                     </p>
                   )}
                 </div>
@@ -117,6 +124,26 @@ const Products = () => {
               </div>
             </div>
           ))}
+        </div>
+        {/* Pagination Controls */}
+        <div className="flex justify-center mt-10">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-l hover:bg-teal-500 hover:text-white transition duration-300 disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="px-4 py-2 bg-white text-gray-700 border-t border-b border-gray-200">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-r hover:bg-teal-500 hover:text-white transition duration-300 disabled:opacity-50"
+          >
+            Next
+          </button>
         </div>
       </div>
     </section>

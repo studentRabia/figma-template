@@ -16,10 +16,10 @@ export default function Home() {
       <FutureProduct/>
 
       <Titlebar title="Top categories" />
-      <TopCategories />
-      <ChairLayout />
+      <TopCategories/>
+      <ChairLayout/>
       <Titlebar title="Our Product" className="text-center" />
-      <Products />
+      <Products/>
     </div>
   );
 }
