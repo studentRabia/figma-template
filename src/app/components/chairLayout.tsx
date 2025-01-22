@@ -38,7 +38,7 @@ const ChairLayout = () => {
       <div className="mx-[5%] lg:mx-[20%] flex flex-col lg:flex-row items-center lg:items-start justify-between gap-12 ">
         
         {/* Left Section: Large Image with Side Text */}
-        <div className="relative flex items-center justify-center lg:w-1/2  hover:translate-x-1 hover:transition-all shadow-sm ">
+        <div className="relative flex items-center justify-center lg:w-1/2  shadow-sm hover:scale-105 transition-transform duration-300">
           {/* Dynamically load the first product's image */}
           {data[0]?.imageUrl ? (
             <Image

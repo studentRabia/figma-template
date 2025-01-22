@@ -47,7 +47,7 @@ const TopCategories = () => {
           {categories.map((category) => (
             <div
               key={category._id}
-              className="relative bg-white rounded-lg overflow-hidden hover:shadow-lg transition  hover:translate-x-1 hover:transition-all shadow-sm "
+              className="relative bg-white rounded-lg overflow-hidden hover:shadow-lg shadow hover:scale-105 transition-transform duration-300"
             >
               <Image
                 src={category.imageUrl}  // Accessing imageUrl from the query

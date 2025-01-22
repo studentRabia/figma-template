@@ -1,6 +1,49 @@
+"use client"
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { client } from "@/sanity/lib/client";
+
+interface Product {
+  title: string;
+  price: number;
+  imageUrl: string;
+  category: {
+    title: string;
+  };
+  description: string;
+  inventory: number;
+  tags: string[];
+}
 
 const NewsletterSection = () => {
+  // Specify the type of the state as Product[]
+  const [instagramProducts, setInstagramProducts] = useState<Product[]>([]);
+
+  // Fetch products with Instagram tag
+  useEffect(() => {
+    const fetchInstagramProducts = async () => {
+      const query = `*[_type == "products" && "instagram" in tags] {
+        title,
+        price,
+        "imageUrl": image.asset->url,
+        category->{
+          title
+        },
+        description,
+        inventory,
+        tags
+      }`;
+      try {
+        const products: Product[] = await client.fetch(query); // Ensure type is Product[]
+        setInstagramProducts(products);
+      } catch (error) {
+        console.error("Error fetching Instagram products:", error);
+      }
+    };
+
+    fetchInstagramProducts();
+  }, []);
+
   return (
     <section className="bg-gray-100 py-10 px-4 lg:px-8">
       {/* Newsletter */}
@@ -27,29 +70,30 @@ const NewsletterSection = () => {
           Follow Products And Discounts On Instagram
         </h3>
 
-        {/* Grid Container with Padding */}
+        {/* Grid Container with Products */}
         <div className="mx-auto px-8 sm:px-[10%] lg:px-[16%] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-          {[
-            "/images/Stool.png",
-            "/images/WheelCh.png",
-            "/images/Chirp.png",
-            "/images/Chairwe.png",
-            "/images/Chair.png",
-            "/images/Moving.png",
-          ].map((src, index) => (
-            <div
-              key={index}
-              className="rounded-lg overflow-hidden shadow hover:scale-105 transition-transform duration-300"
-            >
-              <Image
-                src={src}
-                alt={`Chair ${index + 1}`}
-                width={400}
-                height={400}
-                className="w-full h-auto object-cover object-center"
-              />
-            </div>
-          ))}
+          {instagramProducts.length > 0 ? (
+            instagramProducts.map((product, index) => (
+              <div
+                key={index}
+                className="rounded-lg overflow-hidden shadow hover:scale-105 transition-transform duration-300"
+              >
+                <Image
+                  src={product.imageUrl}
+                  alt={product.title}
+                  width={400}
+                  height={400}
+                  className="w-full h-auto object-cover object-center"
+                />
+                <div className="text-center mt-2">
+                  <h4 className="text-sm font-semibold">{product.title}</h4>
+                  <p className="text-gray-600">${product.price}</p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500">No Instagram products available.</p>
+          )}
         </div>
       </div>
     </section>

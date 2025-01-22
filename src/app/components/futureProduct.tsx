@@ -130,7 +130,7 @@ const FutureProduct = () => {
           <div className="flex flex-wrap -m-4 ">
             {/* Product Cards */} 
             {products.map((product) => (
-              <div key={product._id} className="p-4 w-full sm:w-1/2 lg:w-1/4 hover:translate-x-1 hover:transition-all ">
+              <div key={product._id} className="p-4 w-full sm:w-1/2 lg:w-1/4 hover:scale-105 transition-transform duration-300 ">
                 <div className="h-full border-2 border-gray-200 rounded-lg overflow-hidden shadow-sm">
                   <Image
                     className="lg:h-48 md:h-36 w-full object-cover object-center"
